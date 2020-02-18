@@ -1,0 +1,25 @@
+{block content}
+
+<form n:name=infoForm>
+    <p>
+    <input n:name=title type="text">
+    </p>
+    <p>
+    <textarea n:name=message type="text"></textarea>
+    </p>
+    <div>
+    <select n:name=transport></select>
+    </div>
+    <div>
+
+    {foreach $form[packaging]->items as $key => $label}
+        <label n:name="packaging:$key"><input n:name="packaging:$key"> {$label}</label>
+    {/foreach}
+    </div>
+
+    <select n:name=food ></select>
+    <input class="" n:name=submit value="Odeslat">
+    
+</form>
+
+{/block}

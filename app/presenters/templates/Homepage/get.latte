@@ -1,0 +1,64 @@
+{block content}
+
+<form n:name=filterForm>
+    <select n:name=transport></select>
+    <div>
+    {foreach $form[packaging]->items as $key => $label}
+        <label n:name="packaging:$key"><input n:name="packaging:$key"> {$label}</label>
+    {/foreach}
+    </div>
+    <input class="" n:name=submit value="Filtrovat">
+</form>
+    
+<a n:href="filterOff!"><button>Odebrat Filtry</button></a>
+
+<table>
+    <tr>
+        <th>ID<br>
+            <a n:href="sortAbc! 'id','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'id','DESC'">Sestupně</a>
+        </th>
+        <th>Název<br>
+            <a n:href="sortAbc! 'title','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'title','DESC'">Sestupně</a>
+        </th>
+        <th>Zpráva</th>
+        <th>Typ Přepravy<br>
+        <th>Další požadavky</th>    
+        <th>Zboží</th>    
+    </tr>
+
+    {snippet info}
+    <tr n:foreach="$info as $item">
+        <td>{$item->id}</td>
+        <td>{$item->title}</td>
+        <td>{$item->message|truncate:15}</td>
+        <td>{$configTransport[$item->transport]}</td>
+        <td>{$item->packaging}</td>
+        <td>{$configFood[$item->food]}</td>
+    </tr>
+    {/snippet}
+
+</table>
+
+{snippet pages}
+<div>
+    {if !$paginator->isFirst()}
+        <a n:href="Homepage:get 1"><button><<</button></a>
+
+        <a n:href="Homepage:get $paginator->page-1"><button><</button></a>
+
+    {/if}
+
+    <div>Stránka {$paginator->page} z {$paginator->pageCount}</div>
+
+    {if !$paginator->isLast()}
+
+        <a n:href="Homepage:get $paginator->page+1"><button>></button></a>
+
+        <a n:href="Homepage:get $paginator->pageCount"><button>>></button></a>
+    {/if}
+</div>    
+{/snippet}
+
+{/block}
