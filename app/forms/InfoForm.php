@@ -35,7 +35,7 @@ class InfoForm implements IForm
                 'okurka' => 'Okurka',
                 'paprika' => 'Paprika'
             ]
-        ]);
+        ])->setRequired('Je třeba zvolit zboží.');
         $form->addSubmit('submit');
         
         return $form;
