@@ -1,0 +1,94 @@
+{block content}
+<h2>Výpis objednávek</h2>
+<form n:name=filterForm>
+    <p>
+        <label>Doprava:</label><br>
+        <select n:name=transport></select>
+    </p>
+    <p>
+    <label>Zboží:</label><br>
+    <select n:name=food></select>
+    <p>
+    <p>
+        <label>Požadavky:</label><br>
+        {foreach $form[packaging]->items as $key => $label}
+            <label n:name="packaging:$key"><input n:name="packaging:$key"> {$label}</label>
+        {/foreach}
+    </p>
+    <p>
+        <label>Id:</label><br>
+        <input n:name=id type="number"><br>
+
+        <label>Předmět zprávy:</label><br>
+        <input n:name=title type="text"><br>
+
+        <label>Zpráva:</label><br>
+        <input n:name=message type="text">
+    </p>
+    <input class="" n:name=submit value="Filtrovat">
+</form>
+    
+<a n:href="filterOff!"><button>Odebrat Filtry</button></a>
+<p>
+<table>
+    <tr>
+        <th>ID<br>
+            <a n:href="sortAbc! 'id','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'id','DESC'">Sestupně</a>
+        </th>
+        <th>Název<br>
+            <a n:href="sortAbc! 'title','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'title','DESC'">Sestupně</a>
+        </th>
+        <th>Zpráva<br>
+            <a n:href="sortAbc! 'message','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'message','DESC'">Sestupně</a>
+        
+        </th>
+        <th>Typ Přepravy<br>
+            <a n:href="sortAbc! 'transport','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'transport','DESC'">Sestupně</a>
+        
+        </th>
+        <th>Další požadavky<br>
+            <a n:href="sortAbc! 'packaging','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'packaging','DESC'">Sestupně</a></th>    
+        <th>Zboží<br>
+            <a n:href="sortAbc! 'food','ASC'">Vzestupně</a><br>
+            <a n:href="sortAbc! 'food','DESC'">Sestupně</a></th>    
+    </tr>
+
+    {snippet info}
+    <tr n:foreach="$info as $item">
+        <td>{$item->id}</td>
+        <td>{$item->title}</td>
+        <td>{$item->message|truncate:15}</td>
+        <td>{$configTransport[$item->transport]}</td>
+        <td>{$item->packaging}</td>
+        <td>{$configFood[$item->food]}</td>
+    </tr>
+    {/snippet}
+
+</table>
+</p>
+{snippet pages}
+<div>
+    {if !$paginator->isFirst()}
+        <a n:href="setPage! 1"><button><<</button></a>
+
+        <a n:href="setPage! $paginator->page-1"><button><</button></a>
+
+    {/if}
+
+    <div>Stránka {$paginator->page} z {$paginator->pageCount}</div>
+
+    {if !$paginator->isLast()}
+
+        <a n:href="setPage! $paginator->page+1"><button>></button></a>
+
+        <a n:href="setPage! $paginator->pageCount"><button>>></button></a>
+    {/if}
+</div>    
+{/snippet}
+
+{/block}

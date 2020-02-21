@@ -53,42 +53,72 @@ class InfoModel extends ModelManager{
         return $p;
     }
     
-    function filterInfoBy($limit,$offset,$transport,$packaging = NULL,$col=NULL,$type=NULL){
-        if($col==NULL && $type==NULL){
-            $col='id';
-            $type='DESC';
-        }
+    function filterInfoBy($limit,$offset,$transport,$food,$id="",$title="",$message="",$col='id',$type='DESC',$packaging = NULL){
         
         if($packaging == NULL){
-            $p = $this->database->query('SELECT * FROM info WHERE transport LIKE ? ORDER BY '.$col.' '.$type.' LIMIT ? OFFSET ?',$transport,$limit,$offset)->fetchAll();
-        }
-        elseif(count($packaging)==2){
-           $p = $this->database->query('SELECT * FROM info WHERE transport LIKE ? AND packaging LIKE ? AND packaging LIKE ? ORDER BY '.$col.' '.$type.' LIMIT ? OFFSET ?',
-                   $transport,'%'.$packaging[0].'%','%'.$packaging[1].'%',$limit,$offset)->fetchAll(); 
-        }elseif(count($packaging)==3){
-           $p = $this->database->query('SELECT * FROM info WHERE transport LIKE ? AND packaging LIKE ? AND packaging LIKE ? AND packaging LIKE ? ORDER BY '.$col.' '.$type.' LIMIT ? OFFSET ?',
-                   $transport,'%'.$packaging[0].'%','%'.$packaging[1].'%','%'.$packaging[2].'%',$limit,$offset)->fetchAll(); 
+            $p = $this->database->query('SELECT * FROM info '
+                    . 'WHERE transport LIKE ? '
+                    . 'AND food LIKE ? '
+                    . 'AND id LIKE ? '
+                    . 'AND title LIKE ? '
+                    . 'AND message LIKE ? '
+                    . 'ORDER BY '.$col.' '.$type.' LIMIT ? OFFSET ?',
+                    $transport,$food,"%".$id."%","%".$title."%","%".$message."%",$limit,$offset)->fetchAll();
         }else{
-          $p = $this->database->query('SELECT * FROM info WHERE transport LIKE ? AND packaging LIKE ? ORDER BY '.$col.' '.$type.' LIMIT ? OFFSET ?',
-                  $transport,'%'.$packaging[0].'%',$limit,$offset)->fetchAll();
+            $cnt=0;
+            $t="";
+            foreach($packaging as $item){
+                if($cnt == count($packaging)-1){
+                    $t .= 'packaging LIKE \'%'.$item.'%\'';
+                    break;
+                }
+                $t .= 'packaging LIKE \'%'.$item.'%\' AND ';
+                $cnt++;        
+            }
+            $p = $this->database->query('SELECT * FROM info '
+                    . 'WHERE transport LIKE ? '
+                    . 'AND food LIKE ? '
+                    . 'AND id LIKE ? '
+                    . 'AND title LIKE ? '
+                    . 'AND message LIKE ? '
+                    . 'AND '.$t.' ORDER BY '.$col.' '.$type.' LIMIT ? OFFSET ?',
+                   $transport,$food,"%".$id."%","%".$title."%","%".$message."%",$limit,$offset)->fetchAll();
         }
-        return $p;
+        
+        return $p; 
     }
     
-    function getFilterItemsCount($transport,$packaging = NULL) {
+    function getFilterItemsCount($transport,$food,$id="",$title="",$message="",$packaging = NULL) {
+        
         if($packaging == NULL){
-            $p = $this->database->query('SELECT COUNT(*) AS cnt FROM info WHERE transport LIKE ?',$transport)->fetch();
-        }
-        elseif(count($packaging)==2){
-           $p = $this->database->query('SELECT COUNT(*) AS cnt FROM info WHERE transport LIKE ? AND packaging LIKE ? AND packaging LIKE ?',
-                   $transport,'%'.$packaging[0].'%','%'.$packaging[1].'%')->fetch(); 
-        }elseif(count($packaging)==3){
-           $p = $this->database->query('SELECT COUNT(*) AS cnt FROM info WHERE transport LIKE ? AND packaging LIKE ? AND packaging LIKE ? AND packaging LIKE ?',
-                   $transport,'%'.$packaging[0].'%','%'.$packaging[1].'%','%'.$packaging[2].'%')->fetch(); 
+            $p = $this->database->query('SELECT COUNT(*) AS cnt FROM info '
+                    . 'WHERE transport LIKE ? '
+                    . 'AND food LIKE ? '
+                    . 'AND id LIKE ? '
+                    . 'AND title LIKE ? '
+                    . 'AND message LIKE ? ',
+                    $transport,$food,"%".$id."%","%".$title."%","%".$message."%")->fetch();
         }else{
-          $p = $this->database->query('SELECT COUNT(*) AS cnt FROM info WHERE transport LIKE ? AND packaging LIKE ?',
-                  $transport,'%'.$packaging[0].'%')->fetch();
+            $cnt=0;
+            $t="";
+            foreach($packaging as $item){
+                if($cnt == count($packaging)-1){
+                    $t .= 'packaging LIKE \'%'.$item.'%\'';
+                    break;
+                }
+                $t .= 'packaging LIKE \'%'.$item.'%\' AND ';
+                $cnt++;        
+            }
+            $p = $this->database->query('SELECT COUNT(*) AS cnt FROM info '
+                    . 'WHERE transport LIKE ? '
+                    . 'AND food LIKE ? '
+                    . 'AND id LIKE ? '
+                    . 'AND title LIKE ? '
+                    . 'AND message LIKE ? '
+                    . 'AND '.$t,
+                   $transport,$food,"%".$id."%","%".$title."%","%".$message."%")->fetch();
         }
+        
         return $p->cnt;
     }
     

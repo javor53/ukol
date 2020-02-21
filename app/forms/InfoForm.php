@@ -18,22 +18,22 @@ class InfoForm implements IForm
         $form->addTextArea('message');
         
         $form->addSelect('transport','Transport',[
-            'truck'=>'kamion',
-            'plane'=>'letadlo'
+            'kamion'=>'Kamion',
+            'letadlo'=>'Letadlo'
             ]);
         $form->addCheckboxList('packaging','Packaging', [
-            'a'=>"Požadavek A",
-            'b'=>"Požadavek B",
-            'c'=>"Požadavek C"
+            'A'=>"Ananas navíc",
+            'B'=>"Borůvky navíc",
+            'C'=>"Celer navíc"
             ]);
         $form->addMultiSelect('food','Food',[
-            'fruits'=>[
-                'apple' => 'Jablko',
-                'orange' => 'Pomeranč'
+            'Ovoce'=>[
+                'jablko' => 'Jablko',
+                'pomeranč' => 'Pomeranč'
             ],
-            'vegetables'=>[
-                'cucumber' => 'Okurka',
-                'pepper' => 'Paprika'
+            'Zelenina'=>[
+                'okurka' => 'Okurka',
+                'paprika' => 'Paprika'
             ]
         ]);
         $form->addSubmit('submit');
@@ -45,17 +45,28 @@ class InfoForm implements IForm
         $form = new Form();
         
         $form->addSelect('transport','Transport',[
-            'truck'=>'kamion',
-            'plane'=>'letadlo',
+            'kamion'=>'kamion',
+            'letadlo'=>'letadlo',
             '%%'=>'vše'
             ]);
         
         $form->addCheckboxList('packaging','Packaging', [
-            'a'=>"Požadavek A",
-            'b'=>"Požadavek B",
-            'c'=>"Požadavek C"
+            'A'=>"Ananas navíc",
+            'B'=>"Borůvky navíc",
+            'C'=>"Celer navíc"
             ]);
         
+        $form->addSelect('food','Food',[
+                'jablko' => 'Jablko',
+                'pomeranč' => 'Pomeranč',
+                'okurka' => 'Okurka',
+                'paprika' => 'Paprika',
+                '%%'=>'vše'
+        ]);
+        
+        $form->addInteger('id');
+        $form->addText('title');
+        $form->addText('message');
         
         $form->addSubmit('submit');
         

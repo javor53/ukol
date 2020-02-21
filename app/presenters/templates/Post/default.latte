@@ -1,0 +1,30 @@
+{block content}
+<h2>Objednávka zboží</h2>
+<form n:name=infoForm>
+    <p>
+        <label>Předmět zprávy:</label><br>
+        <input n:name=title type="text">
+    </p>
+    <p>
+        <label>Zpráva:</label><br>
+        <textarea n:name=message type="text"></textarea>
+    </p>
+    <p>
+        <label>Doprava:</label><br>
+        <select n:name=transport></select>
+    </p>
+    <p>
+        <label>Speciální požadavky:</label><br>   
+        {foreach $form[packaging]->items as $key => $label}
+            <label n:name="packaging:$key"><input n:name="packaging:$key"> {$label}</label><br>
+        {/foreach}
+    </p>
+    <p>
+        <label>Zboží:</label> <br>
+        <select n:name=food ></select>
+    </p>
+    <input class="" n:name=submit value="Odeslat">
+    
+</form>
+
+{/block}
